@@ -16,7 +16,7 @@ namespace DeliveriesApi.Controllers
         {
             //http://localhost:56110/api/deliveries/getdeliveries
             //debug
-            //test
+            //test 2
             List<DeliveryItem> lst = new List<DeliveryItem>()
             {
                 new DeliveryItem() { Id = 1, From = "קורקט מתנות", To = "רקמות נייטיב", DeliveryNote = "Aa1234", Description = "תיק גב סמסונייט", Name1 = "אפרת",
