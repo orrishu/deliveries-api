@@ -14,21 +14,15 @@ namespace DeliveriesApi.Models
         public string Title { get; set; }
     }
 
-    public class Branch
+    public class Employee
     {
-        public int BranchID { get; set; }
-        public string BranchName { get; set; }
+        public int EmployeeID { get; set; }
+        public string EmployeeName { get; set; }
     }
 
-    public class Advertiser
+    public class DeliveryStatus
     {
-        public int AdvertiserID { get; set; }
-        public string AdvertiserName { get; set; }
-    }
-
-    public class TenderType
-    {
-        public int TenderTypeID { get; set; }
-        public string TenderTypeName { get; set; }
+        public int StatusID { get; set; }
+        public string StatusName { get; set; }
     }
 }

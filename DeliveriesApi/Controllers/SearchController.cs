@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using DeliveriesApi.Models;
 
-namespace DeliveriesApi.Controllers
+namespace DeliveriesApi.Util
 {
     public class SearchController : ApiController
     {

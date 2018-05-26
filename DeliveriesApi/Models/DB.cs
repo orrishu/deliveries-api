@@ -25,20 +25,20 @@ namespace DeliveriesApi.Models
             return oTender;
         }
 
-        //entity framework usage - multiple items
-        internal List<Branch> GetBranches()
-        {
-            MyDB context = new MyDB();
+        ////entity framework usage - multiple items
+        //internal List<Branch> GetBranches()
+        //{
+        //    MyDB context = new MyDB();
             
-            List<Branch> lst = context.Branches.SqlQuery("Tenders2017_GetBranches").ToList();
+        //    List<Branch> lst = context.Branches.SqlQuery("Tenders2017_GetBranches").ToList();
 
-            context.Dispose();
-            context = null;
-            return lst;
-        }
+        //    context.Dispose();
+        //    context = null;
+        //    return lst;
+        //}
 
         //DAL usage
-        internal DataTable GetAdvertisers()
+        internal DataTable GetDeliveries()
         {
             DBManager oDal = new DBManager(DataProvider.SqlServer, ConfigurationManager.ConnectionStrings["MyDB"].ToString());
 
@@ -46,12 +46,46 @@ namespace DeliveriesApi.Models
             //oDal.AddParameters(0, "@CompanyName", sCompanyName);
 
             oDal.Open();
-            DataTable dt = oDal.ExecuteDataSet(CommandType.StoredProcedure, "Tenders2017_GetAdvertisers").Tables[0];
+            DataTable dt = oDal.ExecuteDataSet(CommandType.Text, "select * from Rakaz_SQL").Tables[0];
             oDal.Close();
             oDal.Dispose();
             oDal = null;
 
             return dt;
         }
+
+        internal DataTable GetDeliveryStatus()
+        {
+            DBManager oDal = new DBManager(DataProvider.SqlServer, ConfigurationManager.ConnectionStrings["MyDB"].ToString());
+
+            //oDal.CreateParameters(1);
+            //oDal.AddParameters(0, "@CompanyName", sCompanyName);
+
+            oDal.Open();
+            DataTable dt = oDal.ExecuteDataSet(CommandType.Text, "select * from Lkup_DeliveryStatus").Tables[0];
+            oDal.Close();
+            oDal.Dispose();
+            oDal = null;
+
+            return dt;
+        }
+
+        internal DataTable GetEmployees()
+        {
+            DBManager oDal = new DBManager(DataProvider.SqlServer, ConfigurationManager.ConnectionStrings["MyDB"].ToString());
+
+            //oDal.CreateParameters(1);
+            //oDal.AddParameters(0, "@CompanyName", sCompanyName);
+
+            oDal.Open();
+            DataTable dt = oDal.ExecuteDataSet(CommandType.Text, "select EmployeeID, EmployeeName from Employee").Tables[0];
+            oDal.Close();
+            oDal.Dispose();
+            oDal = null;
+
+            return dt;
+        }
+
+
     }
 }

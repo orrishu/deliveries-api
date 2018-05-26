@@ -8,7 +8,8 @@ namespace DeliveriesApi.Models
 {
     public class MyDB: DbContext
     {
-        public DbSet<Branch> Branches { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<DeliveryStatus> DeliveryStatus { get; set; }
         public DbSet<TenderItem> Tender { get; set; }
     }
 }

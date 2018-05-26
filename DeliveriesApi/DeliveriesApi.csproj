@@ -126,6 +126,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\Utils.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CodeController.cs" />
     <Compile Include="Controllers\DeliveriesController.cs" />
