@@ -8,3 +8,5 @@ coverage
 .vs
 bin
 obj
+Publish
+Properties

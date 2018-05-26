@@ -24,7 +24,7 @@ namespace DeliveriesApi.Util
             DB oDb = new DB();
             DataTable dt = new DataTable();
             dt = oDb.GetDeliveries();
-
+            /*
             List<DeliveryItem> lst = new List<DeliveryItem>();
             
             foreach(DataRow dr in dt.Rows)
@@ -56,21 +56,37 @@ namespace DeliveriesApi.Util
                 lst.Add(oItem);
 
             }
-            
+            */
+            List<DeliveryItem> lst = (from a in dt.AsEnumerable()
+                                      select new DeliveryItem()
+                                      {
+                                          Id = Convert.ToInt32(a["DeliveryID"]),
+                                          From = a["CompanyNameGet"].ToString(),
+                                          To = a["CompanyNameLet"].ToString(),
+                                          DeliveryNote = a["DeliveryNumber"].ToString(),
+                                          Description = a["Comment"].ToString(),
+                                          Name1 = a["ContactManName"].ToString(),
+                                          Name2 = a["Receiver"].ToString(),
+                                          Combo1 = "",
+                                          Combo2 = "",
+                                          Combo3 = "",
+                                          Receiver1 = "",
+                                          Collect = Utils.ParamValueInt(a["Govayna"].ToString()),
+                                          Date = Convert.ToDateTime(a["DeliveryDate"]),
+                                          ReceivedAt = a["ReceivdTime"].ToString(),
+                                          CustomerName = a["CustomerName"].ToString(),
+                                          FromAddress = a["MyOut"].ToString(),
+                                          ToAddress = a["MyDes"].ToString(),
+                                          Importance = a["UrgencysName"].ToString(),
+                                          Field1 = Utils.ParamYesNo(Convert.ToInt32(a["IsDouble"].ToString())),
+                                          CourierCollected = a["EmployeeID"].ToString(),
+                                          CourierDelivered = a["EmployeeIDSec"].ToString(),
+                                          Status = a["DeliveryStatus"].ToString(),
+                                          EndTime = a["DeliveryTimeTras"].ToString()
+                                      }).ToList();
 
-
-            //List <DeliveryItem> lst = new List<DeliveryItem>()
-            //{
-
-            //    new DeliveryItem() { Id = 1, From = "קורקט מתנות", To = "רקמות נייטיב", DeliveryNote = "Aa1234",
-            //        Description = "תיק גב סמסונייט", Name1 = "אפרת",
-            //    Name2 = "אבשלום", Combo1 = "", Combo2 = "מעטפה-", Combo3 = "", Receiver1 = "", Collect = 500,
-            //        Date = DateTime.Now, ReceivedAt = "11:47",
-            //    CustomerName  = "רקמות נייטיב", FromAddress = "ניר אליהו", ToAddress = "הנגר 10 חולון",
-            //        Importance = "רגיל", Field1 = "לא", CourierCollected = "דורון",
-            //    CourierDelivered = "אבשלום",  Status="הועבר", EndTime  = "11:47" }
-            //};
-
+            dt.Dispose();
+            dt = null;
             return lst;
         }
 
