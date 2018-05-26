@@ -1,0 +1,10 @@
+.DS_Store
+node_modules
+bower_components
+*.log
+dist
+.idea
+coverage
+.vs
+bin
+obj
