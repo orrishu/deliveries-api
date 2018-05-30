@@ -164,6 +164,7 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\OrisFolderProfile.pubxml" />
   </ItemGroup>
   <PropertyGroup>
