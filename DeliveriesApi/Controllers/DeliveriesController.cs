@@ -16,7 +16,7 @@ namespace DeliveriesApi.Util
     {
         [ActionName("GetDeliveries")]
         [HttpGet]
-        public object GetDeliveries()
+        public object GetDeliveries(int page, int pageSize)
         {
             //http://localhost:56110/api/deliveries/getdeliveries
             //debug
@@ -87,7 +87,16 @@ namespace DeliveriesApi.Util
 
             dt.Dispose();
             dt = null;
-            return lst;
+            //return lst;
+            return new
+            {
+                info = new
+                {
+                    count = lst.Count,
+                    page
+                },
+                data = lst.Skip(pageSize * (page - 1)).Take(pageSize)
+            };
         }
 
 
