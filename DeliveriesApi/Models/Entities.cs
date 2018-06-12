@@ -25,4 +25,17 @@ namespace DeliveriesApi.Models
         public int StatusID { get; set; }
         public string StatusName { get; set; }
     }
+
+    public class VehicleType
+    {
+        public int VehicleTypeID { get; set; }
+        public string VehicleTypeName { get; set; }
+    }
+
+    public class FilterItem
+    {
+        public string field { get; set; }
+        public string value { get; set; }
+    }
+
 }

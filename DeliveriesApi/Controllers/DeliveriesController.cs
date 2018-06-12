@@ -7,8 +7,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Data.SqlClient;
 using System.Data;
-
-
+using Newtonsoft.Json;
 
 namespace DeliveriesApi.Util
 {
@@ -16,74 +15,59 @@ namespace DeliveriesApi.Util
     {
         [ActionName("GetDeliveries")]
         [HttpGet]
-        public object GetDeliveries(int page, int pageSize)
+        public object GetDeliveries(int page, int pageSize, string filters="")
         {
-            //http://localhost:56110/api/deliveries/getdeliveries
+            //http://localhost:56110/api/deliveries/getdeliveries?page=1&pageSize=20
             //debug
             //test 2
             DB oDb = new DB();
             DataTable dt = new DataTable();
-            dt = oDb.GetDeliveries();
-            /*
-            List<DeliveryItem> lst = new List<DeliveryItem>();
-            
-            foreach(DataRow dr in dt.Rows)
-            {
-                DeliveryItem oItem = new DeliveryItem();
-                oItem.Id = Convert.ToInt32(dr["DeliveryID"]); 
-                oItem.From = dr["CompanyNameGet"].ToString();
-                oItem.To = dr["CompanyNameLet"].ToString();
-                oItem.DeliveryNote = dr["DeliveryNumber"].ToString();
-                oItem.Description = dr["Comment"].ToString();
-                oItem.Name1 = dr["ContactManName"].ToString();
-                oItem.Name2 = dr["Receiver"].ToString();
-                oItem.Combo1 = "";
-                oItem.Combo2 = "";
-                oItem.Combo3 = "";
-                oItem.Receiver1 = "";
-                oItem.Collect = Utils.ParamValueInt(dr["Govayna"].ToString());
-                oItem.Date = Convert.ToDateTime(dr["DeliveryDate"]);
-                oItem.ReceivedAt = dr["ReceivdTime"].ToString();
-                oItem.CustomerName = dr["CustomerName"].ToString();
-                oItem.FromAddress = dr["MyOut"].ToString();
-                oItem.ToAddress = dr["MyDes"].ToString();
-                oItem.Importance = dr["UrgencysName"].ToString();
-                oItem.Field1 = Utils.ParamYesNo(Convert.ToInt32(dr["IsDouble"].ToString()));
-                oItem.CourierCollected = dr["EmployeeID"].ToString();
-                oItem.CourierDelivered = dr["EmployeeIDSec"].ToString();
-                oItem.Status = dr["DeliveryStatus"].ToString();
-                oItem.EndTime = dr["DeliveryTimeTras"].ToString();
-                lst.Add(oItem);
 
-            }
-            */
-            List<DeliveryItem> lst = (from a in dt.AsEnumerable()
+           
+
+
+            dt = oDb.GetDeliveries(filters);
+           
+            IEnumerable<DeliveryItem> lst = (from a in dt.AsEnumerable()
                                       select new DeliveryItem()
                                       {
-                                          Id = Convert.ToInt32(a["DeliveryID"]),
-                                          From = a["CompanyNameGet"].ToString(),
-                                          To = a["CompanyNameLet"].ToString(),
-                                          DeliveryNote = a["DeliveryNumber"].ToString(),
-                                          Description = a["Comment"].ToString(),
-                                          Name1 = a["ContactManName"].ToString(),
-                                          Name2 = a["Receiver"].ToString(),
-                                          Combo1 = "",
-                                          Combo2 = "",
-                                          Combo3 = "",
-                                          Receiver1 = "",
-                                          Collect = Utils.ParamValueInt(a["Govayna"].ToString()),
-                                          Date = Convert.ToDateTime(a["DeliveryDate"]),
-                                          ReceivedAt = a["ReceivdTime"].ToString(),
-                                          CustomerName = a["CustomerName"].ToString(),
-                                          FromAddress = a["MyOut"].ToString(),
-                                          ToAddress = a["MyDes"].ToString(),
-                                          Importance = a["UrgencysName"].ToString(),
-                                          Field1 = Utils.ParamYesNo(Convert.ToInt32(a["IsDouble"].ToString())),
-                                          CourierCollected = a["EmployeeID"].ToString(),
-                                          CourierDelivered = a["EmployeeIDSec"].ToString(),
-                                          Status = a["DeliveryStatus"].ToString(),
-                                          EndTime = a["DeliveryTimeTras"].ToString()
-                                      }).ToList();
+                                          MySort = Utils.ParamValueInt(a["MySort"].ToString()),
+                                          FinishtimeSenc = Utils.ParamValueDate(a["Finishtime"].ToString()),
+                                          DeliveryTime = Utils.ParamValueDate(a["DeliveryTime"].ToString()),
+                                          CustomerName = Utils.ParamValuestring( a["CustomerName"].ToString()),
+                                          CompanyNameLet = Utils.ParamValuestring(a["CompanyNameLet"].ToString()),
+                                          MyOut = Utils.ParamValuestring(a["MyOut"].ToString()),
+                                          CityName_1 = Utils.ParamValuestring(a["CityName_1"].ToString()),
+                                          archOut = Utils.ParamValuestring(a["archOut"].ToString()),
+                                          mysort2 = Utils.ParamValueInt(a["mysort2"].ToString()),
+                                          CompanyNameGet = Utils.ParamValuestring(a["CompanyNameGet"].ToString()),
+                                          Mydes = Utils.ParamValuestring(a["Mydes"].ToString()),
+                                          cityName = Utils.ParamValuestring(a["cityName"].ToString()),
+                                          archDes = Utils.ParamValuestring(a["archDes"].ToString()),
+                                          employeeID = Utils.ParamValueInt(a["employeeID"].ToString()),
+                                          employeeIDsec = Utils.ParamValueInt(a["employeeIDsec"].ToString()),
+                                          DeliveryStatus = Utils.ParamValueInt(a["DeliveryStatus"].ToString()),
+                                          FinishTime = Utils.ParamValueDate(a["FinishTime"].ToString()),
+                                          UrgencysName = Utils.ParamValuestring(a["UrgencysName"].ToString()),
+                                          Govayna = Utils.ParamValueInt(a["Govayna"].ToString()),
+                                          CustomerDeliveryNo = Utils.ParamValueInt(a["CustomerDeliveryNo"].ToString()),
+                                          Barcode = Utils.ParamValuestring(a["Barcode"].ToString()),
+                                          Comment = Utils.ParamValuestring(a["Comment"].ToString()),
+                                          ContactManName = Utils.ParamValuestring(a["ContactManName"].ToString()),
+                                          UserName = Utils.ParamValuestring(a["UserName"].ToString()),
+                                          WhereToWhere = Utils.ParamValueInt(a["WhereToWhere"].ToString()),
+                                          VehicleTypeID = Utils.ParamValueInt(a["VehicleTypeID"].ToString()),
+                                          EmployeeID_Third = Utils.ParamValuestring(a["EmployeeID_Third"].ToString()),
+                                          DeliveyOut = Utils.ParamValuestring(a["DeliveyOut"].ToString()),
+                                          Receiver = Utils.ParamValuestring(a["Receiver"].ToString()),
+                                          DeliveryDate = Utils.ParamValueDate(a["DeliveryDate"].ToString()),
+                                          //tehumDate = Utils.ParamValueDate(a["TehumDateOnly"].ToString()),
+                                          PakageNum = Utils.ParamValueInt(a["PakageNum"].ToString()),
+                                          BoxNum = Utils.ParamValueInt(a["BoxNum"].ToString()),
+                                          Waiting = Utils.ParamValueInt(a["Waiting"].ToString()),
+                                          CustomerID = Utils.ParamValueInt(a["CustomerID"].ToString())
+          
+                                      });
 
             dt.Dispose();
             dt = null;
@@ -92,7 +76,7 @@ namespace DeliveriesApi.Util
             {
                 info = new
                 {
-                    count = lst.Count,
+                    count = 0,//lst.Count(),
                     page
                 },
                 data = lst.Skip(pageSize * (page - 1)).Take(pageSize)
@@ -121,6 +105,31 @@ namespace DeliveriesApi.Util
 
             }
             
+
+            return lst;
+        }
+
+        [ActionName("GetVehicleType")]
+        [HttpGet]
+        public object GetVehicleType()
+        {
+            //http://localhost:56110/api/deliveries/GetVehicleType
+
+            DB oDb = new DB();
+            DataTable dt = new DataTable();
+            dt = oDb.GetVehicleType();
+
+            List<VehicleType> lst = new List<VehicleType>();
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                VehicleType oItem = new VehicleType();
+                oItem.VehicleTypeID = Convert.ToInt32(dr["VehicleTypeID"]);
+                oItem.VehicleTypeName = dr["VehicleTypeName"].ToString();
+                lst.Add(oItem);
+
+            }
+
 
             return lst;
         }

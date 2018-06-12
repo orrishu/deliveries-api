@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -38,15 +39,45 @@ namespace DeliveriesApi.Models
         //}
 
         //DAL usage
-        internal DataTable GetDeliveries()
+        internal DataTable GetDeliveries(string filters)
         {
-            DBManager oDal = new DBManager(DataProvider.SqlServer, ConfigurationManager.ConnectionStrings["MyDB"].ToString());
+            string sSelect = "select * from Rakaz_SQL ";
+            string sWhere = "";
 
+            DBManager oDal = new DBManager(DataProvider.SqlServer, ConfigurationManager.ConnectionStrings["MyDB"].ToString());
+            oDal.Open();
             //oDal.CreateParameters(1);
             //oDal.AddParameters(0, "@CompanyName", sCompanyName);
+            //http://localhost:56110/api/deliveries/getdeliveries?page=1&pagesize=11&filters=[{"field":"cityName","value":"יבנה"}]
+            if (filters != "")
+            {
+                List<FilterItem> lstFilter = JsonConvert.DeserializeObject<List<FilterItem>>(filters);
+            
+                foreach (FilterItem f in lstFilter)
+                {
+                    
+                    sWhere = sWhere + (sWhere=="" ? " " : " and ") +  f.field + " = '" + f.value + "'";
 
-            oDal.Open();
-            DataTable dt = oDal.ExecuteDataSet(CommandType.Text, "select * from Rakaz_SQL").Tables[0];
+                    //switch (f.field)
+                    //{
+                    //    case "CustomerName":
+                    //        sWhere= sWhere + " CustomerName = '"+ CustomerName + "'" ;
+                    //        break;
+                    //    case "CustomerName":
+                    //        Console.WriteLine(5);
+                    //        break;
+                    //}
+
+                    //string sField = f.field;
+                    //string sValue = f.value;
+
+                }
+            }
+
+            if(sWhere != "")
+                sSelect = sSelect + " where " + sWhere ;
+
+            DataTable dt = oDal.ExecuteDataSet(CommandType.Text, sSelect).Tables[0];
             oDal.Close();
             oDal.Dispose();
             oDal = null;
@@ -63,6 +94,22 @@ namespace DeliveriesApi.Models
 
             oDal.Open();
             DataTable dt = oDal.ExecuteDataSet(CommandType.Text, "select * from Lkup_DeliveryStatus").Tables[0];
+            oDal.Close();
+            oDal.Dispose();
+            oDal = null;
+
+            return dt;
+        }
+
+        internal DataTable GetVehicleType()
+        {
+            DBManager oDal = new DBManager(DataProvider.SqlServer, ConfigurationManager.ConnectionStrings["MyDB"].ToString());
+
+            //oDal.CreateParameters(1);
+            //oDal.AddParameters(0, "@CompanyName", sCompanyName);
+
+            oDal.Open();
+            DataTable dt = oDal.ExecuteDataSet(CommandType.Text, "select * from Lkup_VehicleType").Tables[0];
             oDal.Close();
             oDal.Dispose();
             oDal = null;

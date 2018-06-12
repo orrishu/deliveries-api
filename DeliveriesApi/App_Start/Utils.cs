@@ -14,8 +14,39 @@ namespace DeliveriesApi.Util
 
         public static int ParamValueInt(string val)
         {
+            try
+            { 
             return String.IsNullOrEmpty(val) ? 0 : Convert.ToInt32(val);
+            }
+            catch
+            {
+                return 0;
+            }
         }
+        public static string ParamValuestring(string val)
+        {
+            try
+            {
+                return String.IsNullOrEmpty(val) ? "" : val.ToString();
+            }
+            catch
+            {
+                return "";
+            }
+        }
+        public static DateTime ParamValueDate(string val)
+        {
+            try
+            {
+                return String.IsNullOrEmpty(val) ? DateTime.MinValue : Convert.ToDateTime(val);
+            }
+            catch
+            {
+                return DateTime.MinValue;
+            }
+        }
+                                         
+
 
         public static string ParamYesNo(int val)
         {
