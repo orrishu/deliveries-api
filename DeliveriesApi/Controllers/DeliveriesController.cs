@@ -65,8 +65,7 @@ namespace DeliveriesApi.Util
                                           PakageNum = Utils.ParamValueInt(a["PakageNum"].ToString()),
                                           BoxNum = Utils.ParamValueInt(a["BoxNum"].ToString()),
                                           Waiting = Utils.ParamValueInt(a["Waiting"].ToString()),
-                                          CustomerID = Utils.ParamValueInt(a["CustomerID"].ToString())
-          
+                                          CustomerID = Utils.ParamValueInt(a["CustomerID"].ToString())          
                                       });
 
             dt.Dispose();
@@ -76,7 +75,7 @@ namespace DeliveriesApi.Util
             {
                 info = new
                 {
-                    count = 0,//lst.Count(),
+                    count = lst.Count(),
                     page
                 },
                 data = lst.Skip(pageSize * (page - 1)).Take(pageSize)
