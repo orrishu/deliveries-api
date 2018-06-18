@@ -31,6 +31,8 @@ namespace DeliveriesApi.Util
             IEnumerable<DeliveryItem> lst = (from a in dt.AsEnumerable()
                                       select new DeliveryItem()
                                       {
+                                          DeliveryID= Utils.ParamValueInt(a["DeliveryID"].ToString()),
+                                          DeliveryNumber = Utils.ParamValueInt(a["DeliveryNumber"].ToString()),
                                           MySort = Utils.ParamValueInt(a["MySort"].ToString()),
                                           FinishtimeSenc = Utils.ParamValueDate(a["Finishtime"].ToString()),
                                           DeliveryTime = Utils.ParamValueDate(a["DeliveryTime"].ToString()),
@@ -156,6 +158,38 @@ namespace DeliveriesApi.Util
 
 
             return lst;
+        }
+
+        [ActionName("SetDeliveryEmployee")]
+        [HttpGet]
+        public object SetDeliveryEmployee(int DeliveryNumber, int EmployeeID, int Type)
+        {
+            //http://localhost:56110/api/deliveries/SetDeliveryEmployee?DeliveryNumber=219861&EmployeeID=156&Type=1
+            //Type: 1=אוסף
+            //Type: 2=מוסר
+            //Type: 3=שליח שלישי
+            DB oDb = new DB();
+            string res = oDb.SetDeliveryEmployee(DeliveryNumber, EmployeeID, Type);
+
+           // if(res!="1")
+
+
+            return res;
+        }
+
+        [ActionName("SetDeliveryStatus")]
+        [HttpGet]
+        public object SetDeliveryStatus(int DeliveryNumber, int StatusID)
+        {
+            //http://localhost:56110/api/deliveries/SetDeliveryStatus?DeliveryNumber=219861&StatusID=1
+           
+            DB oDb = new DB();
+            string res = oDb.SetDeliveryStatus(DeliveryNumber, StatusID);
+
+            // if(res!="1")
+
+
+            return res;
         }
 
     }

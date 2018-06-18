@@ -50,6 +50,9 @@ namespace DeliveriesApi.Models
         CustomerID
         */
 
+        
+        public int DeliveryID { get; set; }
+        public int DeliveryNumber { get; set; }
         public int MySort { get; set; }
         public DateTime FinishtimeSenc { get; set; }  //עמודה מחושבת  הפרש בין עכשיו ל Finishtime
         public DateTime DeliveryTime { get; set; }// שעה

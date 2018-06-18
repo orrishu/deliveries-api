@@ -133,6 +133,54 @@ namespace DeliveriesApi.Models
             return dt;
         }
 
+        internal string SetDeliveryEmployee(int DeliveryNumber, int EmployeeID, int Type)
+        {
+            string res = "0";
+            DBManager oDal = new DBManager(DataProvider.SqlServer, ConfigurationManager.ConnectionStrings["MyDB"].ToString());
+            oDal.Open();
+            oDal.CreateParameters(2);
+            oDal.AddParameters(0, "@DeliveryNumber", DeliveryNumber);
+            oDal.AddParameters(1, "@EmployeeID", EmployeeID);
+           
+            switch(Type)
+            {
+                case 1:
+                    res = oDal.ExecuteScalar(CommandType.StoredProcedure, "web_sp_SetDeliveryEmployeeID").ToString();
+                    break;
+                case 2:
+                    res = oDal.ExecuteScalar(CommandType.StoredProcedure, "web_sp_SetDeliveryemployeeIDsec").ToString();
+                    break;
+                case 3:
+                    res = oDal.ExecuteScalar(CommandType.StoredProcedure, "web_sp_SetDeliveryEmployeeID_Third").ToString();
+                    break;
 
+            }
+            
+            oDal.Close();
+            oDal.Dispose();
+            oDal = null;
+
+            return res;
+        }
+
+        internal string SetDeliveryStatus(int DeliveryNumber, int StatusID)
+        {
+            string res = "0";
+            DBManager oDal = new DBManager(DataProvider.SqlServer, ConfigurationManager.ConnectionStrings["MyDB"].ToString());
+            oDal.Open();
+            oDal.CreateParameters(2);
+            oDal.AddParameters(0, "@DeliveryNumber", DeliveryNumber);
+            oDal.AddParameters(1, "@DeliveryStatus", StatusID);
+
+            res = oDal.ExecuteScalar(CommandType.StoredProcedure, "web_sp_SetDeliveryStatus").ToString();
+
+            oDal.Close();
+            oDal.Dispose();
+            oDal = null;
+
+            return res;
+        }
+
+        
     }
 }
