@@ -12,6 +12,13 @@ namespace DeliveriesApi.Models
 {
     public class DB
     {
+        enum CourierType
+        {
+            Collect = 1,
+            Deliver = 2,
+            Third = 3
+        }
+
         //entity framework usage - single item
         public TenderItem GetTenderItem(int iTenderID)
         {
@@ -144,13 +151,13 @@ namespace DeliveriesApi.Models
            
             switch(Type)
             {
-                case 1:
+                case (int)CourierType.Collect:
                     res = oDal.ExecuteScalar(CommandType.StoredProcedure, "web_sp_SetDeliveryEmployeeID").ToString();
                     break;
-                case 2:
+                case (int)CourierType.Deliver:
                     res = oDal.ExecuteScalar(CommandType.StoredProcedure, "web_sp_SetDeliveryemployeeIDsec").ToString();
                     break;
-                case 3:
+                case (int)CourierType.Third:
                     res = oDal.ExecuteScalar(CommandType.StoredProcedure, "web_sp_SetDeliveryEmployeeID_Third").ToString();
                     break;
 
