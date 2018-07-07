@@ -1,5 +1,7 @@
-﻿using System;
+﻿using DeliveriesApi.Models;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -23,6 +25,55 @@ namespace DeliveriesApi.Util
                 return 0;
             }
         }
+
+        public static Employee ParamValueEmployee(int val, DataTable dtemp)
+        {
+            try
+            {
+                if (val != 0)
+                {
+                     Employee e1 = (from emp in dtemp.AsEnumerable()
+                                          where emp["EmployeeID"].ToString() == val.ToString()
+                                    select new Employee()
+                                          {
+                                              EmployeeID = Convert.ToInt32(emp["EmployeeID"]),
+                                              EmployeeName = emp["EmployeeName"].ToString()
+                                          }).First();
+                    return new Employee { EmployeeID = e1.EmployeeID, EmployeeName = e1.EmployeeName };
+                }
+                else
+                    return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static DeliveryStatus ParamValueStatus(int val, DataTable dtemp)
+        {
+            try
+            {
+                if (val != 0)
+                {
+                    DeliveryStatus s1 = (from sta in dtemp.AsEnumerable()
+                                   where sta["StatusID"].ToString() == val.ToString()
+                                   select new DeliveryStatus()
+                                   {
+                                       StatusID = Convert.ToInt32(sta["StatusID"]),
+                                       StatusName = sta["StatusName"].ToString()
+                                   }).First();
+                    return new DeliveryStatus { StatusID = s1.StatusID, StatusName = s1.StatusName };
+                }
+                else
+                    return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static string ParamValuestring(string val)
         {
             try

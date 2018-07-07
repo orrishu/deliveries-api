@@ -67,8 +67,11 @@ namespace DeliveriesApi.Models
         public string cityName { get; set; }// עיר יעד
         public string archDes { get; set; } // אזור יעד
         public int employeeID { get; set; }  //אוסף *   combo
+        public Employee oEmployeeID { get; set; }
         public int employeeIDsec { get; set; } //מוסר    * combo
+        public Employee oEmployeeIDsec { get; set; }
         public int DeliveryStatus { get; set; }     // סטטוס * combo
+        public DeliveryStatus oDeliveryStatus { get; set; }
         public DateTime FinishTime { get; set; }// שעת סיום
         public string UrgencysName { get; set; }// דחיפות
         public int Govayna { get; set; }//גוביינא
@@ -80,7 +83,8 @@ namespace DeliveriesApi.Models
         public string UserName { get; set; }   //שם משתמש
         public int WhereToWhere { get; set; }//סוג שליחות  
         public int VehicleTypeID { get; set; }//אמצעי הובלה * combo
-        public string EmployeeID_Third { get; set; }//שליח שלישי * combo employee
+        public int EmployeeID_Third { get; set; }//שליח שלישי * combo employee
+        public Employee oEmployeeID_Third { get; set; }
         public string DeliveyOut { get; set; }//מספר קבלן
         public string Receiver { get; set; }//שם מקבל
         public DateTime DeliveryDate { get; set; }   //תאריך

@@ -22,52 +22,61 @@ namespace DeliveriesApi.Util
             //test 2
             DB oDb = new DB();
             DataTable dt = new DataTable();
+            DataTable dtemp = new DataTable();
+            DataTable dtstat = new DataTable();
 
-           
+            dtemp = oDb.GetEmployees();
+            dtstat = oDb.GetDeliveryStatus();
 
+            
+            
 
             dt = oDb.GetDeliveries(filters, sort);
-           
+
             IEnumerable<DeliveryItem> lst = (from a in dt.AsEnumerable()
-                                      select new DeliveryItem()
-                                      {
-                                          DeliveryID= Utils.ParamValueInt(a["DeliveryID"].ToString()),
-                                          DeliveryNumber = Utils.ParamValueInt(a["DeliveryNumber"].ToString()),
-                                          MySort = Utils.ParamValueInt(a["MySort"].ToString()),
-                                          FinishtimeSenc = Utils.ParamValueDate(a["Finishtime"].ToString()),
-                                          DeliveryTime = Utils.ParamValueDate(a["DeliveryTime"].ToString()),
-                                          CustomerName = Utils.ParamValuestring( a["CustomerName"].ToString()),
-                                          CompanyNameLet = Utils.ParamValuestring(a["CompanyNameLet"].ToString()),
-                                          MyOut = Utils.ParamValuestring(a["MyOut"].ToString()),
-                                          CityName_1 = Utils.ParamValuestring(a["CityName_1"].ToString()),
-                                          archOut = Utils.ParamValuestring(a["archOut"].ToString()),
-                                          mysort2 = Utils.ParamValueInt(a["mysort2"].ToString()),
-                                          CompanyNameGet = Utils.ParamValuestring(a["CompanyNameGet"].ToString()),
-                                          Mydes = Utils.ParamValuestring(a["Mydes"].ToString()),
-                                          cityName = Utils.ParamValuestring(a["cityName"].ToString()),
-                                          archDes = Utils.ParamValuestring(a["archDes"].ToString()),
-                                          employeeID = Utils.ParamValueInt(a["employeeID"].ToString()),
-                                          employeeIDsec = Utils.ParamValueInt(a["employeeIDsec"].ToString()),
-                                          DeliveryStatus = Utils.ParamValueInt(a["DeliveryStatus"].ToString()),
-                                          FinishTime = Utils.ParamValueDate(a["FinishTime"].ToString()),
-                                          UrgencysName = Utils.ParamValuestring(a["UrgencysName"].ToString()),
-                                          Govayna = Utils.ParamValueInt(a["Govayna"].ToString()),
-                                          CustomerDeliveryNo = Utils.ParamValueInt(a["CustomerDeliveryNo"].ToString()),
-                                          Barcode = Utils.ParamValuestring(a["Barcode"].ToString()),
-                                          Comment = Utils.ParamValuestring(a["Comment"].ToString()),
-                                          ContactManName = Utils.ParamValuestring(a["ContactManName"].ToString()),
-                                          UserName = Utils.ParamValuestring(a["UserName"].ToString()),
-                                          WhereToWhere = Utils.ParamValueInt(a["WhereToWhere"].ToString()),
-                                          VehicleTypeID = Utils.ParamValueInt(a["VehicleTypeID"].ToString()),
-                                          EmployeeID_Third = Utils.ParamValuestring(a["EmployeeID_Third"].ToString()),
-                                          DeliveyOut = Utils.ParamValuestring(a["DeliveyOut"].ToString()),
-                                          Receiver = Utils.ParamValuestring(a["Receiver"].ToString()),
-                                          DeliveryDate = Utils.ParamValueDate(a["DeliveryDate"].ToString()),
-                                          //tehumDate = Utils.ParamValueDate(a["TehumDateOnly"].ToString()),
-                                          PakageNum = Utils.ParamValueInt(a["PakageNum"].ToString()),
-                                          BoxNum = Utils.ParamValueInt(a["BoxNum"].ToString()),
-                                          Waiting = Utils.ParamValueInt(a["Waiting"].ToString()),
-                                          CustomerID = Utils.ParamValueInt(a["CustomerID"].ToString())          
+                                             select new DeliveryItem()
+                                             {
+                                                 DeliveryID = Utils.ParamValueInt(a["DeliveryID"].ToString()),
+                                                 DeliveryNumber = Utils.ParamValueInt(a["DeliveryNumber"].ToString()),
+                                                 MySort = Utils.ParamValueInt(a["MySort"].ToString()),
+                                                 FinishtimeSenc = Utils.ParamValueDate(a["Finishtime"].ToString()),
+                                                 DeliveryTime = Utils.ParamValueDate(a["DeliveryTime"].ToString()),
+                                                 CustomerName = Utils.ParamValuestring(a["CustomerName"].ToString()),
+                                                 CompanyNameLet = Utils.ParamValuestring(a["CompanyNameLet"].ToString()),
+                                                 MyOut = Utils.ParamValuestring(a["MyOut"].ToString()),
+                                                 CityName_1 = Utils.ParamValuestring(a["CityName_1"].ToString()),
+                                                 archOut = Utils.ParamValuestring(a["archOut"].ToString()),
+                                                 mysort2 = Utils.ParamValueInt(a["mysort2"].ToString()),
+                                                 CompanyNameGet = Utils.ParamValuestring(a["CompanyNameGet"].ToString()),
+                                                 Mydes = Utils.ParamValuestring(a["Mydes"].ToString()),
+                                                 cityName = Utils.ParamValuestring(a["cityName"].ToString()),
+                                                 archDes = Utils.ParamValuestring(a["archDes"].ToString()),
+                                                 employeeID = Utils.ParamValueInt(a["employeeID"].ToString()),
+                                                 oEmployeeID = Utils.ParamValueEmployee(Utils.ParamValueInt(a["employeeID"].ToString()), dtemp),
+                                                 employeeIDsec = Utils.ParamValueInt(a["employeeIDsec"].ToString()),
+                                                 oEmployeeIDsec = Utils.ParamValueEmployee(Utils.ParamValueInt(a["employeeIDsec"].ToString()), dtemp),
+                                                 DeliveryStatus = Utils.ParamValueInt(a["DeliveryStatus"].ToString()),
+                                                 oDeliveryStatus= Utils.ParamValueStatus(Utils.ParamValueInt(a["DeliveryStatus"].ToString()), dtstat),
+                                                 FinishTime = Utils.ParamValueDate(a["FinishTime"].ToString()),
+                                                 UrgencysName = Utils.ParamValuestring(a["UrgencysName"].ToString()),
+                                                 Govayna = Utils.ParamValueInt(a["Govayna"].ToString()),
+                                                 CustomerDeliveryNo = Utils.ParamValueInt(a["CustomerDeliveryNo"].ToString()),
+                                                 Barcode = Utils.ParamValuestring(a["Barcode"].ToString()),
+                                                 Comment = Utils.ParamValuestring(a["Comment"].ToString()),
+                                                 ContactManName = Utils.ParamValuestring(a["ContactManName"].ToString()),
+                                                 UserName = Utils.ParamValuestring(a["UserName"].ToString()),
+                                                 WhereToWhere = Utils.ParamValueInt(a["WhereToWhere"].ToString()),
+                                                 VehicleTypeID = Utils.ParamValueInt(a["VehicleTypeID"].ToString()),
+                                                 EmployeeID_Third = Utils.ParamValueInt(a["EmployeeID_Third"].ToString()),
+                                                 oEmployeeID_Third = Utils.ParamValueEmployee(Utils.ParamValueInt(a["EmployeeID_Third"].ToString()), dtemp),
+                                                 DeliveyOut = Utils.ParamValuestring(a["DeliveyOut"].ToString()),
+                                                 Receiver = Utils.ParamValuestring(a["Receiver"].ToString()),
+                                                 DeliveryDate = Utils.ParamValueDate(a["DeliveryDate"].ToString()),
+                                                 //tehumDate = Utils.ParamValueDate(a["TehumDateOnly"].ToString()),
+                                                 PakageNum = Utils.ParamValueInt(a["PakageNum"].ToString()),
+                                                 BoxNum = Utils.ParamValueInt(a["BoxNum"].ToString()),
+                                                 Waiting = Utils.ParamValueInt(a["Waiting"].ToString()),
+                                                 CustomerID = Utils.ParamValueInt(a["CustomerID"].ToString())          
                                       });
 
             dt.Dispose();
