@@ -15,7 +15,7 @@ namespace DeliveriesApi.Util
     {
         [ActionName("GetDeliveries")]
         [HttpGet]
-        public object GetDeliveries(int page, int pageSize, string filters="")
+        public object GetDeliveries(int page, int pageSize, string filters="", string sort = "")
         {
             //http://localhost:56110/api/deliveries/getdeliveries?page=1&pageSize=20
             //debug
@@ -26,7 +26,7 @@ namespace DeliveriesApi.Util
            
 
 
-            dt = oDb.GetDeliveries(filters);
+            dt = oDb.GetDeliveries(filters, sort);
            
             IEnumerable<DeliveryItem> lst = (from a in dt.AsEnumerable()
                                       select new DeliveryItem()

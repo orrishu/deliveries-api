@@ -46,43 +46,46 @@ namespace DeliveriesApi.Models
         //}
 
         //DAL usage
-        internal DataTable GetDeliveries(string filters)
+        internal DataTable GetDeliveries(string filters, string sort)
         {
             string sSelect = "select * from Rakaz_SQL ";
             string sWhere = "";
+            string sSort = "";
 
             DBManager oDal = new DBManager(DataProvider.SqlServer, ConfigurationManager.ConnectionStrings["MyDB"].ToString());
             oDal.Open();
             //oDal.CreateParameters(1);
             //oDal.AddParameters(0, "@CompanyName", sCompanyName);
             //http://localhost:56110/api/deliveries/getdeliveries?page=1&pagesize=11&filters=[{"field":"cityName","value":"יבנה"}]
+
             if (filters != "")
             {
                 List<FilterItem> lstFilter = JsonConvert.DeserializeObject<List<FilterItem>>(filters);
             
                 foreach (FilterItem f in lstFilter)
                 {
-                    
                     sWhere = sWhere + (sWhere=="" ? " " : " and ") +  f.field + " = '" + f.value + "'";
-
-                    //switch (f.field)
-                    //{
-                    //    case "CustomerName":
-                    //        sWhere= sWhere + " CustomerName = '"+ CustomerName + "'" ;
-                    //        break;
-                    //    case "CustomerName":
-                    //        Console.WriteLine(5);
-                    //        break;
-                    //}
-
-                    //string sField = f.field;
-                    //string sValue = f.value;
-
                 }
             }
 
             if(sWhere != "")
                 sSelect = sSelect + " where " + sWhere ;
+
+            // Do Sort
+            if (sort != "")
+            {
+                List<sortItem> lstSort = JsonConvert.DeserializeObject<List<sortItem>>(sort);
+                foreach (sortItem s in lstSort)
+                {
+                    string sSortType = (s.isAscending ? "asc" : "desc");
+                    
+                    sSort = sSort + (sSort == "" ? " " : " , ") + s.field + " " + sSortType + " ";
+                }
+            }
+
+            if (sSort != "")
+                sSelect = sSelect + " Order By " + sSort;
+
 
             DataTable dt = oDal.ExecuteDataSet(CommandType.Text, sSelect).Tables[0];
             oDal.Close();

@@ -38,4 +38,10 @@ namespace DeliveriesApi.Models
         public string value { get; set; }
     }
 
+    public class sortItem
+    {
+        public string field { get; set; }
+        public bool isAscending { get; set; }
+    }
+
 }
