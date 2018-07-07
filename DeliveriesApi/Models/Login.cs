@@ -46,8 +46,9 @@ namespace DeliveriesApi.Models
             //implement login check on db;
             DB oData = new DB();
             User oUser = null;
-            /*
+            
             //something like: 
+
             try
             {
                 //check db for user and pass
@@ -64,10 +65,10 @@ namespace DeliveriesApi.Models
                 }
 
                 return false;
-            }*/
+            }
 
             //** DEBUG: **
-            oUser = new User() { EmployeeID = 1, EmployeeName = "shimmi" };
+           // oUser = new User() { EmployeeID = 1, EmployeeName = "shimmi" };
 
             if (oUser == null)
             {

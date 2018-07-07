@@ -33,11 +33,35 @@ namespace DeliveriesApi.Models
             return oTender;
         }
 
+        internal User Login(string userName, string password)
+        {
+            try
+            {
+                DBManager oDal = new DBManager(DataProvider.SqlServer, ConfigurationManager.ConnectionStrings["MyDB"].ToString());
+
+                oDal.Open();
+                DataTable dt = oDal.ExecuteDataSet(CommandType.Text, "select * from Users where UserName = '" + userName + "' and Password = '" + password + "'").Tables[0];
+                oDal.Close();
+                oDal.Dispose();
+                oDal = null;
+
+                if (dt.Rows.Count > 0)
+                    return new User { EmployeeID = Convert.ToInt32(dt.Rows[0]["UserID"]), EmployeeName = dt.Rows[0]["UserName"].ToString() };
+                else
+                    return null;
+            }
+            catch
+            {
+                return null;
+            }
+            
+        }
+
         ////entity framework usage - multiple items
         //internal List<Branch> GetBranches()
         //{
         //    MyDB context = new MyDB();
-            
+
         //    List<Branch> lst = context.Branches.SqlQuery("Tenders2017_GetBranches").ToList();
 
         //    context.Dispose();
