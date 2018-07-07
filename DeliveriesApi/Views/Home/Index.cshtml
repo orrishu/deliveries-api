@@ -1,0 +1,25 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div style="direction:rtl" align="center">
+        <h1>Delieries API test</h1>
+        <div style="color:crimson">
+            לחץ <a href="~/Home/LoginTest" target="_blank">כאן</a> להתחברות.<br />
+            לחץ <a href="~/api/account/logout" target="_blank">כאן</a> להתנתקות.
+        </div>
+        <br /><br />
+        <a href="~/api/account/me" target="_blank">Me</a> (מעדכן cookie של userData)        
+        <br /><br />
+        <a href="~/api/account/testauth" target="_blank">Check permission</a> (בדיקה אם יש הרשאה לפי [Authorize])
+    </div>
+</body>
+</html>

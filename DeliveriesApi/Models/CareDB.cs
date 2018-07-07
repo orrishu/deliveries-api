@@ -8,6 +8,6 @@ namespace DeliveriesApi.Models
 {
     public class CareDB: DbContext
     {
-        public DbSet<TenderUser> UserDetails { get; set; }
+        public DbSet<User> UserDetails { get; set; }
     }
 }

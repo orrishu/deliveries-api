@@ -1,0 +1,48 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>LoginTest</title>
+</head>
+<body>
+    <h2>Login Test</h2>
+    
+    <form name="fr" action="/" method="post">
+        <input type="text" name="userName" value="moses" /><br /><br />
+        <input type="text" name="password" value="1234" /><br />
+        <br />
+        <input type="checkbox" name="rememberMe" value="1" /> rememberMe<br /><br />
+        <button onclick="SendForm();return false;">GO</button>
+    </form>
+
+    <div id="divLogin"></div>
+
+    <script>
+    function SendForm() {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('post', '/api/Account/Login', true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onload = function () {
+            //debugger
+            console.log(xhr)
+            console.log('DONE', xhr.status);
+            console.log('Cookie:', document.cookie);
+            document.getElementById('divLogin').innerHTML = '<pre>' + xhr.responseText + '</pre>';
+        }.bind(this);
+        //for post: add the body to the send method
+        xhr.send('{"userName":"' + document.fr.userName.value + '", "password":"' + document.fr.password.value + '", "rememberMe":"' + (document.fr.rememberMe.checked ? 'true' : 'false') + '"}');
+    }
+
+    function SetUser(userName, password) {
+        document.fr.userName.value = userName;
+        document.fr.password.value = password;
+    }
+    </script>
+</body>
+</html>

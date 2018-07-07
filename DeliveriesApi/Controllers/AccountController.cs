@@ -1,9 +1,11 @@
-﻿using System;
+﻿using DeliveriesApi.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Security;
 
 namespace DeliveriesApi.Util
 {
@@ -30,19 +32,28 @@ namespace DeliveriesApi.Util
 
         [ActionName("Login")]        
         [HttpPost]
-        public object Login(Models.LoginData loginData)
+        public object Login(LoginData loginData)
         {            
             //implement: check login
-            Models.Login oLogin = new Models.Login();
+            Login oLogin = new Login(loginData);
  
             if (oLogin.CheckLogin())
             {
-                //implement: logged user handle
-                string encryptedToken = oLogin.Token;   //implement encryption
-                long milliseconds = DateTimeOffset.Now.AddDays(7).ToUnixTimeMilliseconds();
+                //user is logged
+                FormsAuthentication.SetAuthCookie(loginData.userName, loginData.rememberMe);
+                //return the user profile from login object;
+                MinifiedUser oUser = oLogin.User;
+                oLogin = null;
+                int iRemember = loginData.rememberMe ? 90 : 1;
+                System.Web.HttpCookie newCookie = new System.Web.HttpCookie("UserData");
+                newCookie.Name = "UserData";
+                newCookie.Path = "/";
+                newCookie.Value = Newtonsoft.Json.JsonConvert.SerializeObject(oUser);
+                newCookie.Expires = DateTime.Now.AddDays(iRemember);
 
-                //implement: return token to site. if needed, use FormsAuthentication with persistent cookie and [Authorize] attribute
-                return new { token = encryptedToken, expires = milliseconds };
+                System.Web.HttpContext.Current.Response.Cookies.Add(newCookie);
+
+                return oUser;
             }
             else
             {
@@ -50,11 +61,94 @@ namespace DeliveriesApi.Util
                 var resp = new HttpResponseMessage();
                 resp.StatusCode = HttpStatusCode.Unauthorized;
                 //add login message to the response
-                string msg = "{ \"error\":\"user was not found with given credentials\" }";
+                string msg = "{ \"error\":\"" + Models.Login.FriendlyLoginMessage(oLogin.LoginStatusCode);
+                if (oLogin.LoginStatusCode == Models.Login.LoginStatus.GeneralError) msg += ": " + oLogin.LoginMessage;
+                msg += "\" }";
                 resp.Content = new StringContent(msg, System.Text.Encoding.UTF8, "application/json");
 
                 return resp;
             }
+        }
+
+        [ActionName("LogOut")]
+        [HttpGet]        
+        public object LogOut()
+        {
+            //this will remove the authentication cookie from the client
+            FormsAuthentication.SignOut();
+
+            var resp = new HttpResponseMessage();
+            resp.StatusCode = HttpStatusCode.OK;
+            //delete userdata cookie
+            //var cookie = new CookieHeaderValue("UserData", String.Empty);     //CookieHeaderValue not working ... ;
+            //cookie.Path = "/";
+            //cookie.Expires = DateTime.Now.AddDays(-1);
+            //resp.Headers.AddCookies(new CookieHeaderValue[] { cookie });
+            //use that instead
+            System.Web.HttpCookie cookie = new System.Web.HttpCookie("UserData")
+            {
+                Name = "UserData",
+                Path = "/",
+                Value = String.Empty,
+                Expires = DateTime.Now.AddDays(-1)
+            };
+            System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
+            resp.Content = new StringContent("{ \"logged\": false }", System.Text.Encoding.UTF8, "application/json");
+
+            return resp;
+        }
+
+        ///api/account/me
+        [ActionName("Me")]
+        [HttpGet]
+        public object Me()
+        {
+            MinifiedUser oUser = (MinifiedUser)UserHelper.GetCurrentUser(true);
+            if (oUser != null)
+            {
+                if (oUser.persistent)
+                {
+                    //need to postpone the cookie for each request. it is because user has checked 'remember me' when logged...
+                    int iRemember = 90;
+                    System.Web.HttpCookie newCookie = new System.Web.HttpCookie("UserData");
+                    newCookie.Name = "UserData";
+                    newCookie.Path = "/";
+                    newCookie.Value = Newtonsoft.Json.JsonConvert.SerializeObject(oUser);
+                    newCookie.Expires = DateTime.Now.AddDays(iRemember);
+                    //newCookie.Domain = "192.118.60.111";
+
+                    System.Web.HttpContext.Current.Response.Cookies.Add(newCookie);
+                }
+                return oUser;
+            }
+            else
+            {
+                //if user did not match, or was not present on cookie, return 401
+                var resp = new HttpResponseMessage();
+                resp.StatusCode = HttpStatusCode.Unauthorized;
+                string msg = "{\"Message\":\"Authorization has been denied for this request.\"}";
+                resp.Content = new StringContent(msg, System.Text.Encoding.UTF8, "application/json");
+
+                return resp;
+            }
+        }        
+        
+        [HttpGet]
+        [Authorize]
+        public object TestAuth()
+        {
+            //implement: use [Authorize] attribute for all methods through api... ;
+            return "OK: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+        }
+
+        ///api/account/me
+        [ActionName("TestUser")]
+        [HttpGet]
+        public object TestUser()
+        {
+            User oUser = (User)UserHelper.GetCurrentUser();
+
+            return oUser;
         }
 
     }
